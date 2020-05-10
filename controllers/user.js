@@ -8,6 +8,7 @@ var path = require('path');
 var jwt = require('../services/jwt');
 var User = require('../models/user');
 var Follow = require('../models/follow');
+var Publication = require('../models/publication');
 
 
 function home(req, res) {
@@ -198,8 +199,9 @@ function getUsers(req,res){
             // Lo hice de dos formas. "following" con callback de countDocuments y "followed" con una promesa
             let following = await Follow.countDocuments({"user": user_id},(err, result) => { return result });
             let followed = await Follow.countDocuments({"followed": user_id}).then(count => count);
+            let publications = await Publication.countDocuments({"user": user_id}).then(count => count);
      
-            return { following, followed }
+            return { following, followed, publications }
             
         } catch(e){
             console.log(e);
